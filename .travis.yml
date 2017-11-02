@@ -1,0 +1,30 @@
+
+language: rust
+sudo: required
+dist: trusty
+rust:
+  - stable
+  - beta
+  - nightly
+
+addons:
+  postgresql: '9.5'
+
+before_script:
+  - pip install 'travis-cargo<0.2' --user
+  - export PATH=$HOME/.local/bin:$PATH
+
+script:
+- |
+  ./test_setup.sh
+  travis-cargo build &&
+  travis-cargo test &&
+  travis-cargo bench &&
+  travis-cargo --only stable doc
+
+after_success:
+  - travis-cargo coveralls --verify
+
+env:
+  global:
+    - RUST_TEST_THREADS=1

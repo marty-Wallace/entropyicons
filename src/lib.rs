@@ -1,4 +1,6 @@
 
+#![cfg_attr(feature="clippy", feature(plugin))]
+#![cfg_attr(feature="clippy", plugin(clippy))]
 #![feature(proc_macro)]
 
 #[macro_use] extern crate diesel;
