@@ -13,10 +13,12 @@ addons:
 
 script:
 - |
-  ./test_setup.sh
+  ./test_setup.sh "$TRAVIS_RUST_VERSION"
   cargo build
   cargo test
-  cargo clippy
+  if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
+    cargo clippy
+  fi
 
 env:
   global:
