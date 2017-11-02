@@ -10,13 +10,9 @@ rust:
 addons:
   postgresql: '9.5'
 
-before_script:
-- |
-  export PATH=$HOME/.local/bin:$PATH
-  ./test_setup.sh
-
 script:
 - |
+  ./test_setup.sh
   cargo build &&
   cargo test &&
 
