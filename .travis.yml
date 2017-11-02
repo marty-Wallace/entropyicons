@@ -13,11 +13,9 @@ addons:
 script:
 - |
   ./test_setup.sh
-  cargo build &&
-  cargo test &&
-
-after_success:
-  - travis-cargo coveralls --verify
+  cargo build
+  cargo test
+  cargo clippy
 
 env:
   global:
