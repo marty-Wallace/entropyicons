@@ -11,6 +11,7 @@ addons:
 
 script:
 - |
+  chmod +x test_setup.sh
   ./test_setup.sh
   cargo clippy
   cargo test --all-features --all
