@@ -13,5 +13,4 @@ script:
 - |
   ./test_setup.sh
   cargo clippy
-  cargo build
   cargo test --all-features --all

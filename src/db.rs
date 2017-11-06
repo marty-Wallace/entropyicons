@@ -30,3 +30,22 @@ pub fn create_post(conn: &PgConnection, title: &str, body: &str) -> Post {
         .get_result(conn)
         .expect("Error saving new post")
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_connection() {
+        establish_connection();
+    }
+
+    #[test]
+    fn test_insert() {
+        let conn = establish_connection();
+        let title = "A test post";
+        let body = "The body of the test post";
+        create_post(&conn, title, body);
+    }
+
+}

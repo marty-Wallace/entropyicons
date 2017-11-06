@@ -2,8 +2,7 @@
 use rand::{Rng, SeedableRng, StdRng};
 use rocket;
 use rocket::request::Request;
-use rocket::response::{NamedFile, Response, Body};
-use std::fs::File;
+use rocket::response::{NamedFile};
 
 #[get("/")]
 fn index() -> &'static str {
@@ -36,7 +35,7 @@ fn image(itemset: String, entropy: String) -> NamedFile {
     // TODO implement image module to take in a rng and an itemset and return a png
     // TODO impl<'r> Responder<'r> for GenPNG in image module
     // example of returning an image using rocket
-    NamedFile::open("image.png").ok().expect("Failed to open image")
+    NamedFile::open("image.png").expect("Failed to open image")
 }
 
 // 404 handler
