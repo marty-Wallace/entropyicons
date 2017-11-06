@@ -4,6 +4,7 @@ sudo: required
 dist: trusty
 cache: cargo
 rust:
+  - stable
   - beta
   - nightly
 
@@ -12,12 +13,12 @@ addons:
 
 script:
 - |
-  ./test_setup.sh
-  cargo build &&
-  cargo test &&
-
-after_success:
-  - travis-cargo coveralls --verify
+  ./test_setup.sh "$TRAVIS_RUST_VERSION"
+  cargo build
+  cargo test
+  if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
+    cargo clippy
+  fi
 
 env:
   global:
