@@ -11,6 +11,7 @@ clippy = { version = "*", optional = true}
 rocket = "*"
 rocket_codegen = "*"
 rand = "0.3"
+image = "*"
 
 [features]
 default = []

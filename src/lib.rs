@@ -11,6 +11,7 @@ extern crate dotenv;
 #[macro_use]extern crate diesel_codegen;
 extern crate rocket;
 extern crate rand;
+extern crate image;
 
 
 pub mod schema;
