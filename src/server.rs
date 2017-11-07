@@ -1,8 +1,11 @@
 
-use rand::{Rng, SeedableRng, StdRng};
+use std::io::Cursor;
+use rand::{SeedableRng, StdRng};
 use rocket;
+use rocket::http::{Status};
 use rocket::request::Request;
-use rocket::response::{NamedFile};
+use rocket::response::{Response};
+use images::generate;
 
 #[get("/")]
 fn index() -> &'static str {
@@ -10,9 +13,9 @@ fn index() -> &'static str {
 }
 
 #[get("/<itemset>/<entropy>")]
-fn image(itemset: String, entropy: String) -> NamedFile {
+fn image<'r>(itemset: String, entropy: String) -> Response<'r>{
 
-    // Use the string as a seed for our RNG.
+    // Use the entropy string as a seed for our RNG.
     let seed = entropy
         .as_bytes()
         .iter()
@@ -22,21 +25,13 @@ fn image(itemset: String, entropy: String) -> NamedFile {
     // init rng
     let mut rng = StdRng::from_seed(seed.as_slice());
 
-    // sample number, poc
-    let n = rng.gen::<i64>();
-
-    // debug itemset and entropy info
-    println!("Itemset: {} , Entropy: {}, First i64: {}",
-            itemset.as_str(),
-            entropy.as_str(),
-            n
-    );
-
-    // TODO implement image module to take in a rng and an itemset and return a png
-    // TODO impl<'r> Responder<'r> for GenPNG in image module
-    // example of returning an image using rocket
-    NamedFile::open("image.png").expect("Failed to open image")
+    Response::build()
+        .status(Status::Ok)
+        .raw_header("ContentType", "image/png")
+        .sized_body(Cursor::new(generate(&itemset, &mut rng)))
+        .finalize()
 }
+
 
 // 404 handler
 #[error(404)]
@@ -80,6 +75,19 @@ mod tests {
         let req = client.get("/not/a/real/url");
         let response = req.dispatch();
         assert_eq!(response.status(), Status::NotFound);
+    }
+
+    #[test]
+    pub fn rocket_api() {
+        let itemset = "itemset";
+        let entropy = "entropy";
+        let client = Client::new(rocket()).expect("Rocket failed to start");
+        let req = client.get(format!("/api/{}/{}", itemset, entropy));
+        let response = req.dispatch();
+
+        println!("{:?}", response);
+        println!("{:?}", response.headers());
+
     }
 
 }
