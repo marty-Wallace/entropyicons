@@ -5,7 +5,7 @@ use rocket;
 use rocket::http::{Status};
 use rocket::request::Request;
 use rocket::response::{Response};
-use images::generate;
+use images::{itemset_delegater};
 
 #[get("/")]
 fn index() -> &'static str {
@@ -28,7 +28,7 @@ fn image<'r>(itemset: String, entropy: String) -> Response<'r>{
     Response::build()
         .status(Status::Ok)
         .raw_header("ContentType", "image/png")
-        .sized_body(Cursor::new(generate(&itemset, &mut rng)))
+        .sized_body(Cursor::new(itemset_delegater(&itemset, &mut rng)))
         .finalize()
 }
 
@@ -45,7 +45,6 @@ pub fn rocket() -> rocket::Rocket {
         .mount("/api", routes![image])
         .catch(errors![not_found])
 }
-
 
 
 #[cfg(test)]
