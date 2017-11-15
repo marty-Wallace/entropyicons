@@ -1,0 +1,56 @@
+{% extends "base" %}
+
+{% block title %}
+{% endblock title %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block body %}
+    <section>
+        <div class="row">
+            <div class="small-12 medium-10 large-12 small-center columns">
+                <div class="row">
+                    <div class="small-11 small-only-center medium-6 columns">
+                        <div class="form-group">
+                            <label for="itemset"></label>
+                            <select id="itemset" class="form-control" name="itemset" aria-describedby="itemsetHelp">
+                                <option value="circles">Circles</option>
+                                <option value="squares">Squares</option>
+                                <option value="shapes">Shapes</option>
+                                <option value="abstract">Abstract</option>
+                                <option value="checkers">Checkers</option>
+                            </select>
+                            <small id="itemsetHelp" class="form-text text-muted">The image set used to generate images</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input id="name" class="form-control" type="text" placeholder="enter text" value="marty@icons.mvw.io" aria-describedby="nameHelp" maxlength="35">
+                            <small id="nameHelp" class="form-text text-muted">This value is used to generate the image</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="radius">Border-radius<span id="radius-value">0 </span> <span> %</span></label>
+                            <input id="radius" value="0" min="0" max="50" class="form-control" type="range">
+                        </div>
+                    </div>
+                </div>
+                <div class="small-12 medium-6 text-center columns">
+                    <div class="container"><img id="image" src="" style="width: 285px; height: 285px" alt="Icon Image"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row code-row">
+            <div class="code-wrapper">
+                <code class="block">
+                    <span id="host-value">localhost:8000/api/</span><span id="itemset-value">square</span>/<span id="name-value">marty@mvw.io</span>
+                </code>
+            </div>
+        </div>
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"
+            integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek="
+            crossorigin="anonymous"></script>
+    <script src="static/js/app.js"></script>
+
+{% endblock body %}

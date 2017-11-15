@@ -5,11 +5,21 @@ use rocket;
 use rocket::http::{Status};
 use rocket::request::Request;
 use rocket::response::{Response};
+use rocket::response::NamedFile;
+use rocket_contrib::Template;
+use std::path::{Path, PathBuf};
 use images::{itemset_delegater};
 
+
 #[get("/")]
-fn index() -> &'static str {
-    "Hello World!"
+fn index() -> Template {
+    let ctx = json!({
+        "title": "Hello World",
+        "message": "Hey There World what's going on?",
+    });
+
+    Template::render("index", &ctx)
+
 }
 
 #[get("/<itemset>/<entropy>")]
@@ -32,6 +42,10 @@ fn image<'r>(itemset: String, entropy: String) -> Response<'r>{
         .finalize()
 }
 
+#[get("/<file..>")]
+fn static_files(file: PathBuf) -> Option<NamedFile> {
+    NamedFile::open(Path::new("static/").join(file)).ok()
+}
 
 // 404 handler
 #[error(404)]
@@ -43,6 +57,8 @@ pub fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .mount("/", routes![index])
         .mount("/api", routes![image])
+        .mount("/static", routes![static_files])
+        .attach(Template::fairing())
         .catch(errors![not_found])
 }
 
@@ -65,7 +81,7 @@ mod tests {
         let response = req.dispatch();
 
         assert_eq!(response.status(), Status::Ok);
-        assert_eq!(response.content_type(), Some(ContentType::Plain));
+        assert_eq!(response.content_type(), Some(ContentType::HTML));
     }
 
     #[test]
@@ -78,7 +94,7 @@ mod tests {
 
     #[test]
     pub fn rocket_api() {
-        let itemset = "itemset";
+        let itemset = "squares";
         let entropy = "entropy";
         let client = Client::new(rocket()).expect("Rocket failed to start");
         let req = client.get(format!("/api/{}/{}", itemset, entropy));

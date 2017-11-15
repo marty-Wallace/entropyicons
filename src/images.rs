@@ -11,11 +11,11 @@ use rand::{Rng, StdRng};
 
 pub fn itemset_delegater(itemset: &str, mut rng: &mut StdRng) -> Vec<u8> {
     match itemset {
-        "circle" => {
+        "circles" => {
             circle_set(&mut rng)
         },
 
-        "square" => {
+        "squares" => {
             square_set(&mut rng)
         },
 
@@ -100,28 +100,27 @@ fn fill_circle(im: &mut DynamicImage, color: [u8; 4], x: u32, y: u32, length: u3
     }
 }
 
-fn square(mut im: &mut DynamicImage, colors: &Vec<[u8; 4]>, rng: &mut StdRng, x: u32, y: u32, l: u32) {
-    let color = rng.choose(colors.as_slice())
-        .expect("Failed to choose random color")
-        .clone();
+fn square(mut im: &mut DynamicImage, colors: &[[u8; 4]], rng: &mut StdRng, x: u32, y: u32, l: u32) {
+    let color = rng.choose(colors)
+        .expect("Failed to choose random color");
 
     let inner = l / 3;
-    fill_square(&mut im, color, x+inner, y+inner, inner);
+    fill_square(&mut im, *color, x+inner, y+inner, inner);
 
     if inner > 3 {
-        square(&mut im, &colors, rng, x, y, inner);
-        square(&mut im, &colors, rng, x + inner, y, inner);
-        square(&mut im, &colors, rng, x + (inner*2), y, inner);
-        square(&mut im, &colors, rng, x, y + inner, inner);
-        square(&mut im, &colors, rng, x, y + (inner * 2), inner);
-        square(&mut im, &colors, rng, x + (inner * 2), y + inner, inner);
-        square(&mut im, &colors, rng, x + inner, y + (inner*2), inner);
-        square(&mut im, &colors, rng, x + (inner * 2), y + (inner *2), inner);
+        square(&mut im, colors, rng, x, y, inner);
+        square(&mut im, colors, rng, x + inner, y, inner);
+        square(&mut im, colors, rng, x + (inner*2), y, inner);
+        square(&mut im, colors, rng, x, y + inner, inner);
+        square(&mut im, colors, rng, x, y + (inner * 2), inner);
+        square(&mut im, colors, rng, x + (inner * 2), y + inner, inner);
+        square(&mut im, colors, rng, x + inner, y + (inner*2), inner);
+        square(&mut im, colors, rng, x + (inner * 2), y + (inner *2), inner);
     }
 }
 
-fn circle(mut im: &mut DynamicImage, colors: &Vec<[u8; 4]>, rng: &mut StdRng, x: u32, y: u32, l: u32) {
-    let color = rng.choose(colors.as_slice())
+fn circle(mut im: &mut DynamicImage, colors: &[[u8; 4]], rng: &mut StdRng, x: u32, y: u32, l: u32) {
+    let color = rng.choose(colors)
         .expect("Failed to choose random color");
 
     let inner = l / 3;
