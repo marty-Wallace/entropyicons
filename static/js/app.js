@@ -6,13 +6,13 @@ var itemset = 'circle';
 
 function setup() {
 
-    name = $('#name').val();
+    name = encodeURIComponent($('#name').val());
     itemset = $('#itemset').find('option:selected').val();
     setRadius($('#radius').val());
 
     // name event handler
     $('#name').on('input', _.throttle(function() {
-        name = $(this).val();
+        name = encodeURIComponent($(this).val());
         setValues();
         setURL();
     }, 99));
@@ -30,6 +30,31 @@ function setup() {
     });
     setURL();
     setValues();
+
+    // smooth scrolling
+     $(document).on('click', 'a[href^="#"]', function (event) {
+         event.preventDefault();
+
+         $('html, body').animate({
+             scrollTop: $($.attr(this, 'href')).offset().top
+         }, 500);
+     });
+
+     setInterval(function() {
+        $('#header-image').attr('src', randomSquareImage());
+     }, 750);
+}
+
+function randomSquareImage() {
+    var text = "";
+    var possible = "01";
+    for(var i = 0; i < 3; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    if(Math.floor(Math.random() *100) % 2 === 0) {
+        return host + "squares/" + text;
+    }
+    return host + "circles/" + text;
 }
 
 function setRadius(rad) {
@@ -43,6 +68,11 @@ function setRadius(rad) {
 function setValues() {
     $('#itemset-value').text(itemset);
     $('#name-value').text(name);
+    if(name === '') {
+        $('#url-description').addClass('invalid');
+    } else {
+        $('#url-description').removeClass('invalid');
+    }
 }
 
 function buildURL() {
@@ -50,7 +80,11 @@ function buildURL() {
 }
 
 function setURL() {
-    $('#image').attr('src', buildURL());
+    if(name === '') {
+        $('#image').attr('src', window.location.origin + '/static/img/default2.png');
+    }else {
+        $('#image').attr('src', buildURL());
+    }
 }
 
 window.addEventListener('load', function() {

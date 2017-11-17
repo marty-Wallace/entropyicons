@@ -34,10 +34,10 @@ fn image<'r>(itemset: String, entropy: String) -> Response<'r>{
 
     // init rng
     let mut rng = StdRng::from_seed(seed.as_slice());
-
     Response::build()
         .status(Status::Ok)
         .raw_header("ContentType", "image/png")
+        .raw_header("Cache-control","max-age=31536000")
         .sized_body(Cursor::new(itemset_delegater(&itemset, &mut rng)))
         .finalize()
 }
@@ -87,7 +87,7 @@ mod tests {
     #[test]
     pub fn rocket_404() {
         let client = Client::new(rocket()).expect("Rocket failed to start");
-        let req = client.get("/not/a/real/url");
+        let req = client.get("/test/a/url/that/is/not/a/real/url");
         let response = req.dispatch();
         assert_eq!(response.status(), Status::NotFound);
     }

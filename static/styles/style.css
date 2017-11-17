@@ -1,4 +1,17 @@
+.mainHeader {
+    padding: 2rem 0;
+    font-size: 3rem;
+    text-align: center;
+}
 
-html {
-    font-family: Menlo, Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+.circleImage {
+    border-radius: 50%;
+}
+
+.invalid {
+    text-decoration: line-through;
+}
+
+.container {
+    max-width: 90%;
 }
