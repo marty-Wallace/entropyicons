@@ -1,0 +1,17 @@
+.mainHeader {
+    padding: 2rem 0;
+    font-size: 3rem;
+    text-align: center;
+}
+
+.circleImage {
+    border-radius: 50%;
+}
+
+.invalid {
+    text-decoration: line-through;
+}
+
+.container {
+    max-width: 90%;
+}

@@ -1,18 +1,31 @@
 
-use rand::{Rng, SeedableRng, StdRng};
+use std::io::Cursor;
+use rand::{SeedableRng, StdRng};
 use rocket;
+use rocket::http::{Status};
 use rocket::request::Request;
-use rocket::response::{NamedFile};
+use rocket::response::{Response};
+use rocket::response::NamedFile;
+use rocket_contrib::Template;
+use std::path::{Path, PathBuf};
+use images::{itemset_delegater};
+
 
 #[get("/")]
-fn index() -> &'static str {
-    "Hello World!"
+fn index() -> Template {
+    let ctx = json!({
+        "title": "Hello World",
+        "message": "Hey There World what's going on?",
+    });
+
+    Template::render("index", &ctx)
+
 }
 
 #[get("/<itemset>/<entropy>")]
-fn image(itemset: String, entropy: String) -> NamedFile {
+fn image<'r>(itemset: String, entropy: String) -> Response<'r>{
 
-    // Use the string as a seed for our RNG.
+    // Use the entropy string as a seed for our RNG.
     let seed = entropy
         .as_bytes()
         .iter()
@@ -21,21 +34,17 @@ fn image(itemset: String, entropy: String) -> NamedFile {
 
     // init rng
     let mut rng = StdRng::from_seed(seed.as_slice());
+    Response::build()
+        .status(Status::Ok)
+        .raw_header("ContentType", "image/png")
+        .raw_header("Cache-control","max-age=31536000")
+        .sized_body(Cursor::new(itemset_delegater(&itemset, &mut rng)))
+        .finalize()
+}
 
-    // sample number, poc
-    let n = rng.gen::<i64>();
-
-    // debug itemset and entropy info
-    println!("Itemset: {} , Entropy: {}, First i64: {}",
-            itemset.as_str(),
-            entropy.as_str(),
-            n
-    );
-
-    // TODO implement image module to take in a rng and an itemset and return a png
-    // TODO impl<'r> Responder<'r> for GenPNG in image module
-    // example of returning an image using rocket
-    NamedFile::open("image.png").expect("Failed to open image")
+#[get("/<file..>")]
+fn static_files(file: PathBuf) -> Option<NamedFile> {
+    NamedFile::open(Path::new("static/").join(file)).ok()
 }
 
 // 404 handler
@@ -48,9 +57,10 @@ pub fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .mount("/", routes![index])
         .mount("/api", routes![image])
+        .mount("/static", routes![static_files])
+        .attach(Template::fairing())
         .catch(errors![not_found])
 }
-
 
 
 #[cfg(test)]
@@ -71,15 +81,28 @@ mod tests {
         let response = req.dispatch();
 
         assert_eq!(response.status(), Status::Ok);
-        assert_eq!(response.content_type(), Some(ContentType::Plain));
+        assert_eq!(response.content_type(), Some(ContentType::HTML));
     }
 
     #[test]
     pub fn rocket_404() {
         let client = Client::new(rocket()).expect("Rocket failed to start");
-        let req = client.get("/not/a/real/url");
+        let req = client.get("/test/a/url/that/is/not/a/real/url");
         let response = req.dispatch();
         assert_eq!(response.status(), Status::NotFound);
+    }
+
+    #[test]
+    pub fn rocket_api() {
+        let itemset = "squares";
+        let entropy = "entropy";
+        let client = Client::new(rocket()).expect("Rocket failed to start");
+        let req = client.get(format!("/api/{}/{}", itemset, entropy));
+        let response = req.dispatch();
+
+        println!("{:?}", response);
+        println!("{:?}", response.headers());
+
     }
 
 }
