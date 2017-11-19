@@ -15,3 +15,7 @@
 .container {
     max-width: 90%;
 }
+
+#image {
+    margin-bottom: 20px;
+}

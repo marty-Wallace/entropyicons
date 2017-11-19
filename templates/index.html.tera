@@ -95,10 +95,10 @@
         <hr class="star-primary">
         <div class="row">
             <div class="small-12 medium-6 text-center columns mx-auto">
-                <div class="container"><img id="image" src="" style="width: 300px; height: 300px" alt="Icon Image"></div>
+                <div class="container"><img id="image" src="" alt="Icon Image"></div>
             </div>
             <div class="col-lg-8 mx-auto">
-                <label for="itemset">Image set:</label>
+                <label for="itemset">Image Set:</label>
                 <div class="form-group">
                     <select id="itemset" class="form-control" name="itemset" aria-describedby="itemsetHelp">
                         <option value="circles">Circles</option>
