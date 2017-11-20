@@ -15,10 +15,11 @@ image = "*"
 tera = "0.10"
 serde_json = "*"
 serde_derive = "*"
+chrono = { version = "0.3", features=["serde"]}
 
 [dependencies.rocket_contrib]
 default-features = false
-features = ["tera_templates"]
+features = ["tera_templates", "json"]
 
 
 [features]

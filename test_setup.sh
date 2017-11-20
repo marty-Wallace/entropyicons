@@ -7,6 +7,6 @@ cargo install diesel_cli
 cargo install clippy --force
 
 diesel database reset
-if [ -f "./db_setup" ]; then
-    psql -U postgres rust_360 < db_setup
+if [ -f "./db_setup.sql" ]; then
+    psql -U postgres rust_360 < db_setup.sql
 fi
