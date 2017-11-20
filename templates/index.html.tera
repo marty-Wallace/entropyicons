@@ -101,17 +101,15 @@
                 <label for="itemset">Image Set:</label>
                 <div class="form-group">
                     <select id="itemset" class="form-control" name="itemset" aria-describedby="itemsetHelp">
-                        <option value="circles">Circles</option>
-                        <option value="squares">Squares</option>
-                        <option value="shapes">Shapes</option>
-                        <option value="abstract">Abstract</option>
-                        <option value="checkers">Checkers</option>
+                        {%  for image in imagesets %}
+                            <option value="{{ image }}">{{ image | capitalize }}</option>
+                        {%  endfor %}
                     </select>
                     <small id="itemsetHelp" class="form-text text-muted">The image set used to generate images</small>
                 </div>
                 <label for="name">Name:</label>
                 <div class="form-group">
-                    <input id="name" class="form-control" type="text" placeholder="enter text" value="marty@icons.mvw.io" aria-describedby="nameHelp" maxlength="35">
+                    <input id="name" class="form-control" type="text" placeholder="enter text" value="marty@icons.mvw.io" aria-describedby="nameHelp" maxlength="75">
                     <small id="nameHelp" class="form-text text-muted">This value is used to generate the image</small>
                 </div>
                 <label for="radius">Border-radius:<span id="radius-value">0 </span> <span> %</span></label>
@@ -165,7 +163,7 @@
                 <div class="footer-col col-md-4">
                     <h3>Entropy Icons on Github</h3>
                     <p>Entropy Icons is an open source project available on
-                        <a href="https://github.com/marty-Wallace/rust_360"><br><i class="fa fa-3x fa-github"></i></a></p>
+                        <a href="https://github.com/marty-Wallace/entropyicons"><br><i class="fa fa-3x fa-github"></i></a></p>
                 </div>
             </div>
         </div>

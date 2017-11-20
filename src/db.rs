@@ -1,11 +1,10 @@
 
-use diesel;
 use diesel::prelude::*;
 use diesel::pg::PgConnection;
+use models::ImageSet;
+use schema::image_set::dsl::*;
 use dotenv::dotenv;
-
 use std::env;
-use super::models::{Post, NewPost};
 
 pub fn establish_connection() -> PgConnection {
     dotenv().ok();
@@ -15,20 +14,12 @@ pub fn establish_connection() -> PgConnection {
 
     PgConnection::establish(&database_url)
         .expect(&format!("Error connecting to {}", database_url))
-
 }
 
-pub fn create_post(conn: &PgConnection, title: &str, body: &str) -> Post {
-    use super::schema::posts;
-
-    let new_post = NewPost {
-        title,
-        body,
-    };
-
-    diesel::insert(&new_post).into(posts::table)
-        .get_result(conn)
-        .expect("Error saving new post")
+pub fn active_imagesets(connection: &PgConnection) -> Vec<ImageSet> {
+    image_set.filter(active.eq(true))
+        .load::<ImageSet>(connection)
+        .expect("Error loading image sets")
 }
 
 #[cfg(test)]
@@ -41,11 +32,14 @@ mod tests {
     }
 
     #[test]
-    fn test_insert() {
+    fn test_active_imagesets_query() {
         let conn = establish_connection();
-        let title = "A test post";
-        let body = "The body of the test post";
-        create_post(&conn, title, body);
+        let imagesets = active_imagesets(&conn);
+
+        println!("Current active imagesets:");
+        for im in imagesets {
+            println!("  {}", im.name);
+        }
     }
 
 }

@@ -1,5 +1,5 @@
 
-extern crate rust_360;
+extern crate entropyicons;
 
 #[test]
 fn it_works() {

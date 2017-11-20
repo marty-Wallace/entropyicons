@@ -1,5 +1,5 @@
 [package]
-name = "rust_360"
+name = "entropyicons"
 version = "0.1.0"
 authors = ["Martin Wallace <martin.v.wallace@ieee.org>"]
 
@@ -15,10 +15,11 @@ image = "*"
 tera = "0.10"
 serde_json = "*"
 serde_derive = "*"
+chrono = { version = "0.3", features=["serde"]}
 
 [dependencies.rocket_contrib]
 default-features = false
-features = ["tera_templates"]
+features = ["tera_templates", "json"]
 
 
 [features]
