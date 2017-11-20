@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "DATABASE_URL=postgres://postgres@localhost/rust_360" > .env
+echo "DATABASE_URL=postgres://postgres@localhost/entropyicons" > .env
 source ./.env
 
 cargo install diesel_cli
@@ -8,5 +8,5 @@ cargo install clippy --force
 
 diesel database reset
 if [ -f "./db_setup.sql" ]; then
-    psql -U postgres rust_360 < db_setup.sql
+    psql -U postgres entropyicons < db_setup.sql
 fi

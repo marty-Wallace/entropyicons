@@ -1,10 +1,10 @@
 #![cfg_attr(feature="clippy", feature(plugin))]
 #![cfg_attr(feature="clippy", plugin(clippy))]
 
-extern crate rust_360;
+extern crate entropyicons;
 
 use std::env;
-use rust_360::server;
+use entropyicons::server;
 
 /// Entry point for binary to start up server
 fn main() {

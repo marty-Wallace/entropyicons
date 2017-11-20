@@ -33,11 +33,14 @@ fn index() -> Template {
 
 #[get("/api/list")]
 /// JSON endpoint to return all of the current active image sets
-///
+/// Available at <https://icons.mvw.io/api/list/>
 fn list() -> Json {
     let conn = establish_connection();
     let im_sets = active_imagesets(&conn);
-    let results = im_sets.iter().map(|ref im| im.name.clone()).collect::<Vec<_>>();
+    let results = im_sets.iter()
+        .map(|im| im.name.clone())
+        .collect::<Vec<_>>();
+
     Json(json!({
         "image_sets": results
     }))
@@ -52,7 +55,7 @@ fn list() -> Json {
 /// * entropy - A String used to seed the RNG object used to generate the response
 ///
 /// # Example
-/// https://icons.mvw.io/api/squares/martinwallace
+/// <https://icons.mvw.io/api/squares/marty-Wallace>
 ///
 fn image<'r>(imageset: String, entropy: String) -> Result<Response<'r>, status::NotFound<Template>> {
 
