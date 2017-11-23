@@ -6,6 +6,7 @@ use schema::image_set::dsl::*;
 use dotenv::dotenv;
 use std::env;
 
+/// Returns a connection object to the Postgres Database.
 pub fn establish_connection() -> PgConnection {
     dotenv().ok();
 
@@ -16,6 +17,11 @@ pub fn establish_connection() -> PgConnection {
         .expect(&format!("Error connecting to {}", database_url))
 }
 
+/// Returns all of the current active imagesets in the database.
+///
+/// # Arguments
+/// * connection - A connection object to the Postgres Database
+///
 pub fn active_imagesets(connection: &PgConnection) -> Vec<ImageSet> {
     image_set.filter(active.eq(true))
         .load::<ImageSet>(connection)
