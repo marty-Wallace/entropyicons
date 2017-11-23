@@ -1,13 +1,13 @@
 
-
 var host = window.location.origin + '/api/';
-var name = 'marty@icons.mvw.io';
-var itemset = 'circle';
+var static_host = window.location.origin + '/static/';
+var name = 'Boxi@icons.mvw.io';
+var itemset = 'shapes';
 
 function setup() {
 
-    name = encodeURIComponent($('#name').val());
-    itemset = $('#itemset').find('option:selected').val();
+    setName(name);
+    name = encodeURIComponent(name);
     setRadius($('#radius').val());
 
     // name event handler
@@ -46,15 +46,15 @@ function setup() {
 }
 
 function randomSquareImage() {
+    /// these are precomputed as static images
     var text = "";
     var possible = "01";
     for(var i = 0; i < 3; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
-    if(Math.floor(Math.random() *100) % 2 === 0) {
-        return host + "squares/" + text;
-    }
-    return host + "circles/" + text;
+
+    text = (Math.floor(Math.random() *100) % 2 ? 's': 'c') + text + '.png';
+    return static_host + 'img/headers/' + text;
 }
 
 function setRadius(rad) {
@@ -81,10 +81,14 @@ function buildURL() {
 
 function setURL() {
     if(name === '') {
-        $('#image').attr('src', window.location.origin + '/static/img/default2.png');
+        $('#image').attr('src', static_host + 'img/default2.png');
     }else {
         $('#image').attr('src', buildURL());
     }
+}
+
+function setName(name) {
+    $('#name').val(name);
 }
 
 window.addEventListener('load', function() {
